@@ -1,0 +1,20 @@
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kaniko
+spec:
+  containers:
+  - name: kaniko
+    image: gcr.io/kaniko-project/executor:latest
+    args: ["--dockerfile=/workspace/test-data/Dockerfile",
+            "--context=dir://workspace/test-data",
+            "--no-push"] 
+    volumeMounts:
+      - name: dockerfile-storage
+        mountPath: /workspace
+  restartPolicy: Never
+  volumes:
+    - name: dockerfile-storage
+      hostPath:
+        path: /tmp
