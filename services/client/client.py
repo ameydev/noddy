@@ -26,4 +26,5 @@ try:
 finally:
 	fin.close()
 
+os.remove(tar_name)
 

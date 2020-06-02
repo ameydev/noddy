@@ -9,7 +9,7 @@ spec:
     image: gcr.io/kaniko-project/executor:latest
     args: ["--dockerfile=/workspace/test-data/Dockerfile",
             "--context=dir://workspace/test-data",
-            "--no-push"] 
+            "--destination=registry.docker-registry.svc.cluster.local/test-data:latest"] 
     volumeMounts:
       - name: dockerfile-storage
         mountPath: /workspace
@@ -17,4 +17,4 @@ spec:
   volumes:
     - name: dockerfile-storage
       hostPath:
-        path: /tmp
+        path: /tmp/kaniko

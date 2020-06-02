@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: registry
+  labels:
+    app: registry
+  namespace: docker-registry
+spec:
+  containers:
+  - name: registry
+    image: registry:2
+    imagePullPolicy: Always
+    ports:
+      - containerPort: 5000
+    volumeMounts:
+      - name: registry-data
+        mountPath: /var/lib/registry
+  volumes:
+    - name: registry-data
+      hostPath:
+        path: /tmp/registry
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: registry
+  namespace: docker-registry
+spec:
+  selector:
+    app: registry
+  ports:
+    - port: 80
+      targetPort: 5000

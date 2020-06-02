@@ -7,7 +7,7 @@ import tarfile
 
 UPLOAD_FOLDER = '/workspace'
 # ALLOWED_EXTENSIONS = set(['tar', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
-ALLOWED_EXTENSIONS = set(['tar','.gz','pdf','tar.gz'])
+ALLOWED_EXTENSIONS = set(['tar','.gz','tar.gz'])
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
