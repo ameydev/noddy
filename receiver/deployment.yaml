@@ -1,0 +1,22 @@
+apiVersion: v1 
+kind: Pod 
+metadata: 
+    name: build-context-receiver
+    labels:
+        app: build-context-receiver
+spec:
+  containers:
+    - name: receiver
+      image: ameydev/build-context-receiver:latest
+      imagePullPolicy: Always
+      securityContext:
+        privileged: true
+      volumeMounts:
+        - mountPath: /workspace
+          name: workspace
+      ports: 
+        - containerPort: 5000
+  volumes:
+  - name: workspace
+    hostPath:
+        path: /tmp/builds

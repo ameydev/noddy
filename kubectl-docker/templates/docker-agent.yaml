@@ -1,0 +1,53 @@
+apiVersion: v1 
+kind: Pod 
+metadata: 
+    name: docker-agent
+spec:
+  restartPolicy: Never
+  containers:
+    - name: docker-agent
+      image: ameydev/docker-agent:latest
+    #   args: ["./docker-agent/entrypoint.sh"]
+      imagePullPolicy: Always
+      securityContext:
+        privileged: true
+      volumeMounts:
+        - mountPath: /var/run/docker.sock
+          name: docker-sock
+        - name: workspace
+          mountPath: /workspace
+        - mountPath: /lib/modules
+          name: modules
+          readOnly: true
+        - mountPath: /sys/fs/cgroup
+          name: cgroup
+        - name: dind-storage
+          mountPath: /var/lib/docker
+      env:
+        - name: TAG_NAME
+          valueFrom:
+            configMapKeyRef:
+                name: docker-context
+                key: TAG_NAME
+        - name: CONTEXT_PATH
+          valueFrom:
+            configMapKeyRef:
+                name: docker-context
+                key: CONTEXT_PATH
+  volumes:
+  - name: workspace
+    hostPath:
+        path: /tmp/builds/
+  - name: docker-sock
+    hostPath:
+        path: /var/run/docker.sock
+  - name: modules
+    hostPath:
+      path: /lib/modules
+      type: Directory
+  - name: cgroup
+    hostPath:
+      path: /sys/fs/cgroup
+      type: Directory
+  - name: dind-storage
+    emptyDir: {} 

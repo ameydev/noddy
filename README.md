@@ -16,9 +16,19 @@ A docker host service running in the kubernestes cluster, to build/push the dock
 
 Whenever the dev mode is up, otherwise down.
 Use commands:
+1. `kubectl docker init`
+>  * deploy the receiver pod (kubectl apply -f noddy/services/receiver/deployment.yaml)
+   * port-forward the pod in background (kubectl port-forward 6000:5000 &)
+   * Print build-context receiver is ready..
 
-`kubectl docker init`
+2. `kubectl docker build --path /some/to/build-context -t my-app:latest`
+>  * Tar the contents of --path `/some/to/build-context` with name of my-app.tar.gz
+   * POST request with my-app.tar.gz
+   * Deploy the DinD container pod (kubectl apply -f docker-agent.yaml)
+   * Print the node on which DinD, receiver pods are running
+        (The node has to be added as node-selector in my-app pod spec)
+   * Delete the DinD pod(the src/ saved on hostPath of node must get clean-up ed).
 
-`kubectl docker build -t test-data .`
-
-`kubectl docker cleanup`
+3. `kubectl docker cleanup`
+>  * Delete receiver deployment
+   * stop port-forwarding
